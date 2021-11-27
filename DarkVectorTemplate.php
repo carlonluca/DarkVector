@@ -22,6 +22,8 @@
  * @ingroup Skins
  */
 
+use MediaWiki\MediaWikiServices;
+
 /**
  * QuickTemplate class for DarkVector skin
  * @ingroup Skins
@@ -38,9 +40,17 @@ class DarkVectorTemplate extends BaseTemplate {
 		$nav = $this->data['content_navigation'];
 
 		if ( $this->config->get( 'DarkVectorUseIconWatch' ) ) {
-			$mode = $this->getSkin()->getUser()->isWatched( $this->getSkin()->getRelevantTitle() )
-				? 'unwatch'
-				: 'watch';
+			$isTitleWatched = (
+				MediaWikiServices::getInstance()->getPermissionManager()->userHasRight(
+					$this->getSkin()->getUser(),
+					'viewmywatchlist'
+				) &&
+				MediaWikiServices::getInstance()->getWatchedItemStore()->isWatched(
+					$this->getSkin()->getUser(),
+					$this->getSkin()->getRelevantTitle()
+				)
+			);
+			$mode = $isTitleWatched ? 'unwatch' : 'watch';
 
 			if ( isset( $nav['actions'][$mode] ) ) {
 				$nav['views'][$mode] = $nav['actions'][$mode];
