@@ -334,7 +334,7 @@ class DarkVectorTemplate extends BaseTemplate {
 					echo $content; /* Allow raw HTML block to be defined by extensions */
 				}
 
-				$this->renderAfterPortlet( $name );
+				$this->getSkin()->getAfterPortlet( $name );
 				?>
 			</div>
 		</div>
